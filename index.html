@@ -12,11 +12,15 @@
     :root{ --bg1:#0a0f14; --bg2:#101820; --brand:#25D366; --cta:#19a957; --text:#eef3f7; --muted:#a7b0b8; }
     *{box-sizing:border-box}
     html,body{margin:0;height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
-    body{background:radial-gradient(1200px 600px at 50% -10%, #1b2a35 0%, var(--bg1) 40%, var(--bg2) 100%);
-         color:var(--text);display:flex;align-items:center;justify-content:center;min-height:100vh}
+    body{
+      background:radial-gradient(1200px 600px at 50% -10%, #1b2a35 0%, var(--bg1) 40%, var(--bg2) 100%);
+      color:var(--text);display:flex;align-items:center;justify-content:center;min-height:100vh
+    }
     .wrap{width:100%;max-width:520px;padding:20px}
-    .card{background:rgba(16,24,32,.6);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.06);
-          border-radius:20px;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,.45);text-align:center}
+    .card{
+      position:relative;background:rgba(16,24,32,.6);backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,.45);text-align:center
+    }
     .headline{font-size:28px;line-height:1.2;font-weight:800;margin:8px 0 14px}
     .badge{display:inline-block;background:linear-gradient(90deg,#ffd977,#ffbf40);color:#221;padding:3px 10px;border-radius:999px;font-weight:800;margin-bottom:8px}
     .sub{color:var(--muted);font-size:15px;margin-bottom:16px}
@@ -27,15 +31,22 @@
     @media (min-width:520px){ .headline{font-size:32px} }
   </style>
 
-  <!-- Meta Pixel: PageView -->
+  <!-- Meta Pixel (una sola init + guard para PageView) -->
   <script>
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
-    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init','742433698739693');
-    fbq('track','PageView');
+    (function(){
+      if(!window.fbq){
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+        (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init','742433698739693');
+      }
+      if(!window.__pv_sent){
+        fbq('track','PageView');
+        window.__pv_sent = true;
+      }
+    })();
   </script>
   <noscript><img height="1" width="1" style="display:none" alt=""
        src="https://www.facebook.com/tr?id=742433698739693&ev=PageView&noscript=1"></noscript>
@@ -47,12 +58,17 @@
       <h1 class="headline"><span class="badge">+35% en tu registro</span><br>Hoy puede ser tu día</h1>
       <p class="sub">Atención personalizada por WhatsApp. Promo disponible por tiempo limitado.</p>
 
-      <!-- ENLACE DIRECTO (sin JS externo) -->
+      <!-- ENLACE DIRECTO A WHATSAPP -->
       <a
+        id="cta"
         class="cta"
         href="https://api.whatsapp.com/send?phone=5492233462025&text=Hola%2C%20quiero%20reclamar%20mi%20bono%20del%2035%25.%20%5Bmeta%3Alanding_direct%5D"
         rel="noopener"
-        onclick="try{fbq('track','Contact')}catch(e){};(new Image()).src='https://www.facebook.com/tr?id=742433698739693&ev=Contact&dl='+encodeURIComponent(location.href)+'&v=2.9.97&r='+(Date.now());"
+        onclick="(function(){try{if(typeof fbq==='function'){fbq('track','Contact');}else{(new Image()).src='https://www.facebook.com/tr?id=742433698739693&ev=Contact&dl='+encodeURIComponent(location.href);}}catch(e){}})();"
       >Reclamar bono ahora</a>
 
-      <div class="foot"><small>Solo para ma
+      <div class="foot"><small>Solo para mayores de 18 años. Jugá con responsabilidad.</small></div>
+    </section>
+  </main>
+</body>
+</html>
