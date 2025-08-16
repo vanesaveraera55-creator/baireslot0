@@ -43,7 +43,7 @@
     @media (min-width:520px){ .headline{font-size:32px} }
   </style>
 
-  <!-- Meta Pixel -->
+  <!-- Meta Pixel: PageView -->
   <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -53,10 +53,8 @@
     fbq('init','742433698739693');
     fbq('track','PageView');
   </script>
-  <noscript>
-    <img height="1" width="1" style="display:none" alt=""
-         src="https://www.facebook.com/tr?id=742433698739693&ev=PageView&noscript=1">
-  </noscript>
+  <noscript><img height="1" width="1" style="display:none" alt=""
+       src="https://www.facebook.com/tr?id=742433698739693&ev=PageView&noscript=1"></noscript>
 </head>
 
 <body>
@@ -68,36 +66,56 @@
         <div id="brandText" class="brandText">BAIRESLOT</div>
       </div>
 
-      <h1 class="headline">
-        <span class="badge">+35% en tu registro</span><br>Hoy puede ser tu día
-      </h1>
+      <h1 class="headline"><span class="badge">+35% en tu registro</span><br>Hoy puede ser tu día</h1>
       <p class="sub">Atención personalizada por WhatsApp. Promo disponible por tiempo limitado.</p>
 
-      <!-- BOTÓN DIRECTO A WHATSAPP -->
-      <a
-        class="cta"
-        href="https://api.whatsapp.com/send?phone=5492233462025&text=Hola%2C%20quiero%20reclamar%20mi%20bono%20del%2035%25.%20%5Bmeta%3Alanding_direct%5D"
-        rel="noopener"
-        onclick="try{fbq('track','Contact')}catch(e){};(new Image()).src='https://www.facebook.com/tr?id=742433698739693&ev=Contact&dl='+encodeURIComponent(location.href)+'&v=2.9.97&r='+(Date.now());"
-      >
-        Reclamar bono ahora
-      </a>
+      <!-- ENLACE DIRECTO (se setea por JS según el dispositivo) -->
+      <a id="cta" class="cta" href="https://api.whatsapp.com/send?phone=5492233462025&text=Hola%2C%20quiero%20reclamar%20mi%20bono%20del%2035%25.%20%5Bmeta%3Alanding_direct%5D"
+         rel="noreferrer noopener">Reclamar bono ahora</a>
 
       <div class="trust">
-        <span>🛡 Seguro</span>
-        <span>⚡ Respuesta en minutos</span>
-        <span>📱 100% móvil</span>
+        <span>🛡 Seguro</span><span>⚡ Respuesta en minutos</span><span>📱 100% móvil</span>
       </div>
 
-      <div class="barWrap">
-        <div class="barLabel">Oferta activa…</div>
-        <div class="bar"><i></i></div>
-      </div>
-
-      <div class="foot">
-        <small>Solo para mayores de 18 años. Jugá con responsabilidad.</small>
-      </div>
+      <div class="barWrap"><div class="barLabel">Oferta activa…</div><div class="bar"><i></i></div></div>
+      <div class="foot"><small>Solo para mayores de 18 años. Jugá con responsabilidad.</small></div>
     </section>
   </main>
+
+  <script>
+    // ===== CONFIGURACIÓN =====
+    const PHONE = '5492233462025';
+    const TEXT = 'Hola, quiero reclamar mi bono del 35%. [meta:landing_direct]';
+
+    // Detección
+    const ua = navigator.userAgent || '';
+    const isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(ua);
+    const isInApp = /FBAN|FBAV|FB_IAB|Instagram|Messenger/i.test(ua);
+
+    // Selección de base según plataforma
+    let base;
+    if (!isMobile) {
+      base = 'https://web.whatsapp.com/send';        // Escritorio → Web WhatsApp
+    } else if (isInApp) {
+      base = 'https://api.whatsapp.com/send';        // In-app browsers → API
+    } else {
+      base = 'https://wa.me';                        // Móvil normal → wa.me
+    }
+
+    // Construcción del enlace final
+    const link = (base === 'https://wa.me')
+      ? ${base}/${PHONE}?text=${encodeURIComponent(TEXT)}
+      : ${base}?phone=${PHONE}&text=${encodeURIComponent(TEXT)};
+
+    // Setear href definitivo
+    const a = document.getElementById('cta');
+    a.setAttribute('href', link);
+
+    // Disparar Contact en el clic (sin bloquear navegación) + fallback por imagen
+    a.addEventListener('click', function(){
+      try { fbq('track','Contact'); } catch(e) {}
+      (new Image()).src = https://www.facebook.com/tr?id=742433698739693&ev=Contact&dl=${encodeURIComponent(location.href)}&v=2.9.97&r=${Date.now()};
+    });
+  </script>
 </body>
 </html>
