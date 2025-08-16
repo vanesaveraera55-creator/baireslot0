@@ -9,58 +9,56 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <meta name="format-detection" content="telephone=no" />
-  <!-- performance hints -->
-  <link rel="dns-prefetch" href="//api.whatsapp.com">
-  <link rel="dns-prefetch" href="//wa.me">
-  <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
-
   <style>
-    :root { --bg1:#0a0f14; --bg2:#101820; --brand:#25D366; --cta:#19a957; --text:#eef3f7; --muted:#a7b0b8; }
-    *{box-sizing:border-box} html,body{margin:0;height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
-    body{background:radial-gradient(1200px 600px at 50% -10%,#1b2a35 0%,var(--bg1) 40%,var(--bg2) 100%);
-         color:var(--text);display:flex;align-items:center;justify-content:center}
+    :root{ --bg1:#0a0f14; --bg2:#101820; --brand:#25D366; --cta:#19a957; --text:#eef3f7; --muted:#a7b0b8; }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    body{
+      background:radial-gradient(1200px 600px at 50% -10%, #1b2a35 0%, var(--bg1) 40%, var(--bg2) 100%);
+      color:var(--text);display:flex;align-items:center;justify-content:center
+    }
     .wrap{width:100%;max-width:520px;padding:20px}
-    .card{position:relative;background:rgba(16,24,32,.6);backdrop-filter:blur(6px);
-          border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:22px;
-          box-shadow:0 10px 40px rgba(0,0,0,.45)}
+    .card{
+      position:relative;background:rgba(16,24,32,.6);backdrop-filter:blur(6px);
+      border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,.45)
+    }
     .logo{display:flex;justify-content:center;align-items:center;margin-bottom:10px}
     .logo img{height:54px;width:auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.45))}
     .brandText{display:none;font-weight:800;letter-spacing:.5px;font-size:28px}
     .headline{font-size:28px;line-height:1.2;font-weight:800;text-align:center;margin:8px 0 10px}
-    .headline .badge{display:inline-block;background:linear-gradient(90deg,#ffd977,#ffbf40);color:#221;
-                     padding:3px 10px;border-radius:999px;font-weight:800;margin-bottom:8px}
+    .headline .badge{display:inline-block;background:linear-gradient(90deg,#ffd977,#ffbf40);
+      color:#221; padding:3px 10px;border-radius:999px;font-weight:800;margin-bottom:8px}
     .sub{color:var(--muted);text-align:center;font-size:15px;margin-bottom:16px}
-    .cta{display:block;text-align:center;text-decoration:none;width:100%;border:0;border-radius:18px;padding:16px 18px;
-         font-size:18px;font-weight:800;letter-spacing:.3px;background:linear-gradient(180deg,var(--brand),var(--cta));
-         color:#08140d;cursor:pointer;box-shadow:0 10px 24px rgba(25,169,87,.35);transition:transform .08s ease}
+    .cta{display:block;width:100%;border:0;border-radius:18px;padding:16px 18px;font-size:18px;
+      font-weight:800;letter-spacing:.3px;background:linear-gradient(180deg,var(--brand),var(--cta));
+      color:#08140d;cursor:pointer;box-shadow:0 10px 24px rgba(25,169,87,.35);transition:transform .08s ease}
     .cta:active{transform:translateY(1px)}
     .trust{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:12px;color:var(--muted);font-size:12px}
     .trust span{display:flex;align-items:center;gap:6px}
-    .barWrap{margin-top:16px}.barLabel{font-size:12px;color:var(--muted);margin-bottom:6px;text-align:center}
-    .bar{height:8px;background:#2b3640;border-radius:999px;overflow:hidden}.bar>i{display:block;height:100%;width:68%;
-         background:linear-gradient(90deg,#ffa63b,#ffdf73)}
-    .foot{margin-top:14px;text-align:center;color:#7f8a93;font-size:11px}.foot small{display:block;opacity:.95}
-    @media (min-width:520px){.headline{font-size:32px}}
+    .barWrap{margin-top:16px}
+    .barLabel{font-size:12px;color:var(--muted);margin-bottom:6px;text-align:center}
+    .bar{height:8px;background:#2b3640;border-radius:999px;overflow:hidden}
+    .bar>i{display:block;height:100%;width:68%;background:linear-gradient(90deg,#ffa63b,#ffdf73)}
+    .foot{margin-top:14px;text-align:center;color:#7f8a93;font-size:11px}
+    .foot small{display:block;opacity:.95}
+    @media (min-width:520px){ .headline{font-size:32px} }
   </style>
 
-  <!-- Meta Pixel -->
+  <!-- Meta Pixel (TU pixel) -->
   <script>
-    (function () {
+    (function(){
       var PID = '742433698739693';
-      if (PID) {
-        !function (f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
         n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
         t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
         (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', PID); fbq('track','PageView');
-      } else { window.fbq = function(){}; }
+      fbq('init', PID);
+      fbq('track','PageView');
     })();
   </script>
-  <noscript>
-    <img height="1" width="1" style="display:none"
-         src="https://www.facebook.com/tr?id=742433698739693&ev=PageView&noscript=1" alt="">
-  </noscript>
+  <noscript><img height="1" width="1" style="display:none"
+       src="https://www.facebook.com/tr?id=742433698739693&ev=PageView&noscript=1" alt=""></noscript>
 </head>
 
 <body>
@@ -73,22 +71,18 @@
       </div>
 
       <h1 class="headline">
-        <span class="badge">+35% en tu registro</span><br>Hoy puede ser tu día
+        <span class="badge">+35% en tu registro</span><br>
+        Hoy puede ser tu día
       </h1>
 
       <p class="sub">Atención personalizada por WhatsApp. Promo disponible por tiempo limitado.</p>
 
-      <!-- CTA como ENLACE con href funcional aunque no cargue JS -->
-      <a id="cta"
-         class="cta"
-         href="https://api.whatsapp.com/send?phone=5492233462025&text=Hola%2C%20quiero%20reclamar%20mi%20bono%20del%2035%25%20en%20Baireslot.&utm_source=meta&utm_medium=landing&utm_campaign=baireslot_whatsapp"
-         rel="noopener"
-         aria-label="Reclamar bono ahora por WhatsApp">
-         Reclamar bono ahora
-      </a>
+      <button id="cta" class="cta" type="button">Reclamar bono ahora</button>
 
       <div class="trust">
-        <span>🛡 Seguro</span><span>⚡ Respuesta en minutos</span><span>📱 100% móvil</span>
+        <span>🛡️ Seguro</span>
+        <span>⚡ Respuesta en minutos</span>
+        <span>📱 100% móvil</span>
       </div>
 
       <div class="barWrap">
@@ -103,64 +97,44 @@
   </main>
 
   <script>
-    // ====== CONFIG ======
+    // Config
     const PHONE_NUMBER = '5492233462025';
-    const WA_TEXT = 'Hola, quiero reclamar mi bono del 35% en Baireslot.';
-    // ====================
+    const WA_TEXT = 'Hola, quiero reclamar mi bono del 35%. [meta:landing_direct]';
 
-    // Pixel seguro al clic (no bloquea navegación)
-    function trackContactSafe(){ try{ fbq('track','Contact'); }catch(_){} }
+    function buildWaLink(){
+      return https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(WA_TEXT)};
+    }
 
-    // Mejora: en móviles intentamos abrir la app; fallback al href (api.whatsapp.com)
-    (function enhanceWhatsAppLink(){
-      const a = document.getElementById('cta');
-      if (!a) return;
-
-      // Aseguramos UTM y mensaje en el href base (funciona sin JS)
-      const baseParams = new URLSearchParams({
-        phone: PHONE_NUMBER,
-        text: WA_TEXT,
-        utm_source: 'meta',
-        utm_medium: 'landing',
-        utm_campaign: 'baireslot_whatsapp',
-        v: String(Date.now())
-      });
-      a.href = https://api.whatsapp.com/send?${baseParams.toString()};
-
-      const UA = navigator.userAgent || '';
-      const isAndroid = /Android/i.test(UA);
-      const isIOS     = /iPhone|iPad|iPod/i.test(UA);
-      const isMobile  = isAndroid || isIOS;
-
-      a.addEventListener('click', function(ev){
-        trackContactSafe();
-
-        if (!isMobile) return; // desktop: dejamos que vaya al href (WhatsApp Web)
-
-        // Móvil: intentamos deep link, y si no, caemos al href tras 900 ms
-        ev.preventDefault();
-        const encoded = encodeURIComponent(WA_TEXT);
-        const deep = whatsapp://send?phone=${PHONE_NUMBER}&text=${encoded};
-
-        let bailed = false;
-        const fallback = setTimeout(() => {
-          if (bailed) return;
-          window.location.href = a.href; // api.whatsapp.com
-        }, 900);
-
-        const onHide = () => { bailed = true; cleanup(); };
-        function cleanup(){
-          clearTimeout(fallback);
-          document.removeEventListener('visibilitychange', onHide);
-          window.removeEventListener('pagehide', onHide);
+    // Envía Contact (fbq) y si fallara usa fallback por imagen
+    function sendContact(){
+      let sent = false;
+      try{
+        if (window.fbq) {
+          fbq('track','Contact',{value:0,currency:'USD'});
+          sent = true;
         }
-        document.addEventListener('visibilitychange', onHide);
-        window.addEventListener('pagehide', onHide);
+      }catch(_){}
+      if(!sent){
+        const img = new Image();
+        img.src = https://www.facebook.com/tr?id=742433698739693&ev=Contact&dl=${encodeURIComponent(location.href)}&v=2.9.97&r=${Date.now()};
+      }
+    }
 
-        // Intento abrir la app
-        try { window.location.href = deep; } catch(_) {}
-      }, {passive:false});
-    })();
+    let locked = false;
+    async function goWhatsApp(){
+      if(locked) return; locked = true;
+      // 1) Contact
+      sendContact();
+      // 2) pequeño delay para que llegue antes de navegar
+      await new Promise(r=>setTimeout(r,220));
+      // 3) abrir WhatsApp
+      const link = buildWaLink();
+      let opened = false; try{ opened = !!window.open(link,'blank','noopener'); }catch(){}
+      if(!opened) window.location.href = link;
+      setTimeout(()=>{ locked = false; }, 1200);
+    }
+
+    document.getElementById('cta').addEventListener('click', goWhatsApp);
   </script>
 </body>
 </html>
