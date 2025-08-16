@@ -9,8 +9,10 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <meta name="format-detection" content="telephone=no" />
+  <!-- performance hints -->
   <link rel="dns-prefetch" href="//api.whatsapp.com">
   <link rel="dns-prefetch" href="//wa.me">
+  <link rel="preconnect" href="https://connect.facebook.net" crossorigin>
 
   <style>
     :root { --bg1:#0a0f14; --bg2:#101820; --brand:#25D366; --cta:#19a957; --text:#eef3f7; --muted:#a7b0b8; }
@@ -28,9 +30,9 @@
     .headline .badge{display:inline-block;background:linear-gradient(90deg,#ffd977,#ffbf40);color:#221;
                      padding:3px 10px;border-radius:999px;font-weight:800;margin-bottom:8px}
     .sub{color:var(--muted);text-align:center;font-size:15px;margin-bottom:16px}
-    .cta{display:block;width:100%;border:0;border-radius:18px;padding:16px 18px;font-size:18px;font-weight:800;letter-spacing:.3px;
-         background:linear-gradient(180deg,var(--brand),var(--cta));color:#08140d;cursor:pointer;
-         box-shadow:0 10px 24px rgba(25,169,87,.35);transition:transform .08s ease}
+    .cta{display:block;text-align:center;text-decoration:none;width:100%;border:0;border-radius:18px;padding:16px 18px;
+         font-size:18px;font-weight:800;letter-spacing:.3px;background:linear-gradient(180deg,var(--brand),var(--cta));
+         color:#08140d;cursor:pointer;box-shadow:0 10px 24px rgba(25,169,87,.35);transition:transform .08s ease}
     .cta:active{transform:translateY(1px)}
     .trust{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:12px;color:var(--muted);font-size:12px}
     .trust span{display:flex;align-items:center;gap:6px}
@@ -76,9 +78,14 @@
 
       <p class="sub">Atención personalizada por WhatsApp. Promo disponible por tiempo limitado.</p>
 
-      <button id="cta" class="cta" type="button" aria-label="Reclamar bono ahora por WhatsApp">
-        Reclamar bono ahora
-      </button>
+      <!-- CTA como ENLACE con href funcional aunque no cargue JS -->
+      <a id="cta"
+         class="cta"
+         href="https://api.whatsapp.com/send?phone=5492233462025&text=Hola%2C%20quiero%20reclamar%20mi%20bono%20del%2035%25%20en%20Baireslot.&utm_source=meta&utm_medium=landing&utm_campaign=baireslot_whatsapp"
+         rel="noopener"
+         aria-label="Reclamar bono ahora por WhatsApp">
+         Reclamar bono ahora
+      </a>
 
       <div class="trust">
         <span>🛡 Seguro</span><span>⚡ Respuesta en minutos</span><span>📱 100% móvil</span>
@@ -96,82 +103,64 @@
   </main>
 
   <script>
-    // ========= CONFIG =========
-    const PHONE_NUMBER = '5492233462025'; // AR: 54 + 9 + área + línea (sin 0 ni 15)
+    // ====== CONFIG ======
+    const PHONE_NUMBER = '5492233462025';
     const WA_TEXT = 'Hola, quiero reclamar mi bono del 35% en Baireslot.';
-    // ==========================
+    // ====================
 
-    // URLs candidatos (deep link / api / wa.me) con UTM
-    const encodedText = encodeURIComponent(WA_TEXT);
-    const qs = new URLSearchParams({
-      phone: PHONE_NUMBER,
-      text: WA_TEXT,
-      utm_source: 'meta',
-      utm_medium: 'landing',
-      utm_campaign: 'baireslot_whatsapp',
-      v: String(Date.now())
-    }).toString();
+    // Pixel seguro al clic (no bloquea navegación)
+    function trackContactSafe(){ try{ fbq('track','Contact'); }catch(_){} }
 
-    const URLS = {
-      DEEP: whatsapp://send?phone=${PHONE_NUMBER}&text=${encodedText},
-      API:  https://api.whatsapp.com/send?${qs},
-      WAME: https://wa.me/${PHONE_NUMBER}?text=${encodedText}&utm_source=meta&utm_medium=landing&utm_campaign=baireslot_whatsapp&v=${Date.now()}
-    };
+    // Mejora: en móviles intentamos abrir la app; fallback al href (api.whatsapp.com)
+    (function enhanceWhatsAppLink(){
+      const a = document.getElementById('cta');
+      if (!a) return;
 
-    // Detección de entorno
-    const UA = navigator.userAgent || '';
-    const isAndroid = /Android/i.test(UA);
-    const isIOS = /iPhone|iPad|iPod/i.test(UA);
-    const isMobile = isAndroid || isIOS;
-    const isFBApp = /\bFBAN|FBAV|FB_IAB|FBAN\/Messenger|FB_IAB\/FB4A\b/i.test(UA);
-    const isIGApp = /\bInstagram\b/i.test(UA);
-    const isMetaInApp = isFBApp || isIGApp;
+      // Aseguramos UTM y mensaje en el href base (funciona sin JS)
+      const baseParams = new URLSearchParams({
+        phone: PHONE_NUMBER,
+        text: WA_TEXT,
+        utm_source: 'meta',
+        utm_medium: 'landing',
+        utm_campaign: 'baireslot_whatsapp',
+        v: String(Date.now())
+      });
+      a.href = https://api.whatsapp.com/send?${baseParams.toString()};
 
-    // Fijamos parámetro v en la URL (anti-caché) sin cambiar el enlace del anuncio
-    (function cacheBustURL() {
-      try {
-        const url = new URL(window.location.href);
-        if (!url.searchParams.has('v')) {
-          url.searchParams.set('v', String(Date.now()));
-          history.replaceState(null, '', url.toString());
+      const UA = navigator.userAgent || '';
+      const isAndroid = /Android/i.test(UA);
+      const isIOS     = /iPhone|iPad|iPod/i.test(UA);
+      const isMobile  = isAndroid || isIOS;
+
+      a.addEventListener('click', function(ev){
+        trackContactSafe();
+
+        if (!isMobile) return; // desktop: dejamos que vaya al href (WhatsApp Web)
+
+        // Móvil: intentamos deep link, y si no, caemos al href tras 900 ms
+        ev.preventDefault();
+        const encoded = encodeURIComponent(WA_TEXT);
+        const deep = whatsapp://send?phone=${PHONE_NUMBER}&text=${encoded};
+
+        let bailed = false;
+        const fallback = setTimeout(() => {
+          if (bailed) return;
+          window.location.href = a.href; // api.whatsapp.com
+        }, 900);
+
+        const onHide = () => { bailed = true; cleanup(); };
+        function cleanup(){
+          clearTimeout(fallback);
+          document.removeEventListener('visibilitychange', onHide);
+          window.removeEventListener('pagehide', onHide);
         }
-      } catch (e) {}
-    })();
-
-    // Apertura con fallbacks, solo tras clic (interés real)
-    function openWhatsApp() {
-      try { fbq('track','Contact'); } catch(e) {}
-
-      if (isMetaInApp) {
-        // In-app FB/IG → mejor compatibilidad
-        window.location.href = URLS.API;
-        return;
-      }
-
-      if (isMobile) {
-        let redirected = false;
-
-        const fallback1 = setTimeout(() => { if (!redirected) window.location.href = URLS.API; }, 700);
-        const fallback2 = setTimeout(() => { if (!redirected) window.location.href = URLS.WAME; }, 1500);
-
-        const onHide = () => { redirected = true; cleanup(); };
-        function cleanup(){ clearTimeout(fallback1); clearTimeout(fallback2);
-          document.removeEventListener('visibilitychange', onHide); window.removeEventListener('pagehide', onHide); }
-
         document.addEventListener('visibilitychange', onHide);
         window.addEventListener('pagehide', onHide);
 
-        // Intento directo a la app
-        window.location.href = URLS.DEEP;
-
-      } else {
-        // Desktop → WhatsApp Web
-        window.location.href = URLS.API;
-      }
-    }
-
-    // Clic obligatorio
-    document.getElementById('cta').addEventListener('click', openWhatsApp);
+        // Intento abrir la app
+        try { window.location.href = deep; } catch(_) {}
+      }, {passive:false});
+    })();
   </script>
 </body>
 </html>
