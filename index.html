@@ -80,7 +80,7 @@
       <button id="cta" class="cta" type="button">Reclamar bono ahora</button>
 
       <div class="trust">
-        <span>🛡️ Seguro</span>
+        <span>🛡 Seguro</span>
         <span>⚡ Respuesta en minutos</span>
         <span>📱 100% móvil</span>
       </div>
@@ -129,7 +129,8 @@
       await new Promise(r=>setTimeout(r,220));
       // 3) abrir WhatsApp
       const link = buildWaLink();
-      let opened = false; try{ opened = !!window.open(link,'blank','noopener'); }catch(){}
+      let opened = false; 
+      try{ opened = !!window.open(link, 'blank', 'noopener'); }catch(){}
       if(!opened) window.location.href = link;
       setTimeout(()=>{ locked = false; }, 1200);
     }
