@@ -29,7 +29,7 @@
     .headline .badge{display:inline-block;background:linear-gradient(90deg,#ffd977,#ffbf40);
       color:#221; padding:3px 10px;border-radius:999px;font-weight:800;margin-bottom:8px}
     .sub{color:var(--muted);text-align:center;font-size:15px;margin-bottom:16px}
-    .cta{display:block;width:100%;border:0;border-radius:18px;padding:16px 18px;font-size:18px;
+    .cta{display:block;width:100%;text-align:center;text-decoration:none;border:0;border-radius:18px;padding:16px 18px;font-size:18px;
       font-weight:800;letter-spacing:.3px;background:linear-gradient(180deg,var(--brand),var(--cta));
       color:#08140d;cursor:pointer;box-shadow:0 10px 24px rgba(25,169,87,.35);transition:transform .08s ease}
     .cta:active{transform:translateY(1px)}
@@ -44,7 +44,7 @@
     @media (min-width:520px){ .headline{font-size:32px} }
   </style>
 
-  <!-- Meta Pixel (TU pixel) -->
+  <!-- Meta Pixel -->
   <script>
     (function(){
       var PID = '742433698739693';
@@ -77,7 +77,8 @@
 
       <p class="sub">Atención personalizada por WhatsApp. Promo disponible por tiempo limitado.</p>
 
-      <button id="cta" class="cta" type="button">Reclamar bono ahora</button>
+      <!-- BOTÓN como <a> real -->
+      <a id="cta" class="cta" href="#" target="_blank" rel="noopener">Reclamar bono ahora</a>
 
       <div class="trust">
         <span>🛡 Seguro</span>
@@ -97,45 +98,39 @@
   </main>
 
   <script>
-    // Config
-    const PHONE_NUMBER = '5492233462025';
+    // ===== Config =====
+    const PHONE_NUMBER = '5492233462025'; // 54 + 9 + área + línea (sin 0 ni 15)
     const WA_TEXT = 'Hola, quiero reclamar mi bono del 35%. [meta:landing_direct]';
 
     function buildWaLink(){
       return https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(WA_TEXT)};
     }
 
-    // Envía Contact (fbq) y si fallara usa fallback por imagen
+    // Dispara Contact sin bloquear la navegación
     function sendContact(){
-      let sent = false;
-      try{
-        if (window.fbq) {
-          fbq('track','Contact',{value:0,currency:'USD'});
-          sent = true;
-        }
-      }catch(_){}
-      if(!sent){
-        const img = new Image();
-        img.src = https://www.facebook.com/tr?id=742433698739693&ev=Contact&dl=${encodeURIComponent(location.href)}&v=2.9.97&r=${Date.now()};
-      }
+      try { if (window.fbq) fbq('track','Contact',{value:0,currency:'USD'}); } catch(_) {}
+      // Fallback por imagen (no bloquea)
+      const img = new Image();
+      img.src = https://www.facebook.com/tr?id=742433698739693&ev=Contact&dl=${encodeURIComponent(location.href)}&v=2.9.97&r=${Date.now()};
     }
 
-    let locked = false;
-    async function goWhatsApp(){
-      if(locked) return; locked = true;
-      // 1) Contact
+    // Configura el href al cargar y maneja el clic
+    const cta = document.getElementById('cta');
+    const waLink = buildWaLink();
+    cta.setAttribute('href', waLink);
+
+    cta.addEventListener('click', function(){
+      // Disparamos Contact pero NO prevenimos el default; el navegador abre WhatsApp igual
       sendContact();
-      // 2) pequeño delay para que llegue antes de navegar
-      await new Promise(r=>setTimeout(r,220));
-      // 3) abrir WhatsApp
-      const link = buildWaLink();
-      let opened = false; 
-      try{ opened = !!window.open(link, 'blank', 'noopener'); }catch(){}
-      if(!opened) window.location.href = link;
-      setTimeout(()=>{ locked = false; }, 1200);
-    }
 
-    document.getElementById('cta').addEventListener('click', goWhatsApp);
+      // Fallback: si el target _blank estuviera bloqueado, forzamos navegación misma pestaña
+      setTimeout(() => {
+        if (document.visibilityState === 'visible') {
+          // La pestaña no cambió → forzar redirección
+          window.location.href = waLink;
+        }
+      }, 400);
+    });
   </script>
 </body>
 </html>
