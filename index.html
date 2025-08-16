@@ -26,7 +26,7 @@
     .brandText{display:none;font-weight:800;letter-spacing:.5px;font-size:28px}
     .headline{font-size:28px;line-height:1.2;font-weight:800;text-align:center;margin:8px 0 10px}
     .headline .badge{display:inline-block;background:linear-gradient(90deg,#ffd977,#ffbf40);
-      color:#221; padding:3px 10px;border-radius:999px;font-weight:800;margin-bottom:8px}
+      color:#221;padding:3px 10px;border-radius:999px;font-weight:800;margin-bottom:8px}
     .sub{color:var(--muted);text-align:center;font-size:15px;margin-bottom:16px}
     .cta{display:block;width:100%;text-align:center;text-decoration:none;border:0;border-radius:18px;padding:16px 18px;font-size:18px;
       font-weight:800;letter-spacing:.3px;background:linear-gradient(180deg,var(--brand),var(--cta));
@@ -43,7 +43,7 @@
     @media (min-width:520px){ .headline{font-size:32px} }
   </style>
 
-  <!-- Meta Pixel: PageView -->
+  <!-- Meta Pixel -->
   <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -53,8 +53,10 @@
     fbq('init','742433698739693');
     fbq('track','PageView');
   </script>
-  <noscript><img height="1" width="1" style="display:none" alt=""
-       src="https://www.facebook.com/tr?id=742433698739693&ev=PageView&noscript=1"></noscript>
+  <noscript>
+    <img height="1" width="1" style="display:none" alt=""
+         src="https://www.facebook.com/tr?id=742433698739693&ev=PageView&noscript=1">
+  </noscript>
 </head>
 
 <body>
@@ -66,50 +68,36 @@
         <div id="brandText" class="brandText">BAIRESLOT</div>
       </div>
 
-      <h1 class="headline"><span class="badge">+35% en tu registro</span><br>Hoy puede ser tu día</h1>
+      <h1 class="headline">
+        <span class="badge">+35% en tu registro</span><br>Hoy puede ser tu día
+      </h1>
       <p class="sub">Atención personalizada por WhatsApp. Promo disponible por tiempo limitado.</p>
 
-      <!-- ENLACE DIRECTO (se setea por JS según el navegador) -->
-      <a id="cta" class="cta" href="#" target="_blank" rel="noopener noreferrer">Reclamar bono ahora</a>
+      <!-- BOTÓN DIRECTO A WHATSAPP -->
+      <a
+        class="cta"
+        href="https://api.whatsapp.com/send?phone=5492233462025&text=Hola%2C%20quiero%20reclamar%20mi%20bono%20del%2035%25.%20%5Bmeta%3Alanding_direct%5D"
+        rel="noopener"
+        onclick="try{fbq('track','Contact')}catch(e){};(new Image()).src='https://www.facebook.com/tr?id=742433698739693&ev=Contact&dl='+encodeURIComponent(location.href)+'&v=2.9.97&r='+(Date.now());"
+      >
+        Reclamar bono ahora
+      </a>
 
       <div class="trust">
-        <span>🛡 Seguro</span><span>⚡ Respuesta en minutos</span><span>📱 100% móvil</span>
+        <span>🛡 Seguro</span>
+        <span>⚡ Respuesta en minutos</span>
+        <span>📱 100% móvil</span>
       </div>
 
-      <div class="barWrap"><div class="barLabel">Oferta activa…</div><div class="bar"><i></i></div></div>
-      <div class="foot"><small>Solo para mayores de 18 años. Jugá con responsabilidad.</small></div>
+      <div class="barWrap">
+        <div class="barLabel">Oferta activa…</div>
+        <div class="bar"><i></i></div>
+      </div>
+
+      <div class="foot">
+        <small>Solo para mayores de 18 años. Jugá con responsabilidad.</small>
+      </div>
     </section>
   </main>
-
-  <script>
-    // ===== CONFIG: cambiá solo acá si querés otro número =====
-    const PHONE_NUMBER = '5492233462025';
-    const WA_TEXT = 'Hola, quiero reclamar mi bono del 35%. [meta:landing_direct]';
-
-    // Detecta in-app browsers (Facebook/Instagram) y usa api.whatsapp.com
-    const ua = navigator.userAgent || '';
-    const IN_APP = /FBAN|FBAV|FB_IAB|Instagram|Line\/|Twitter/i.test(ua);
-    const base = IN_APP ? 'https://api.whatsapp.com/send' : 'https://wa.me';
-    const waLink = IN_APP
-      ? ${base}?phone=${PHONE_NUMBER}&text=${encodeURIComponent(WA_TEXT)}
-      : ${base}/${PHONE_NUMBER}?text=${encodeURIComponent(WA_TEXT)};
-
-    // Setea el href real
-    const cta = document.getElementById('cta');
-    cta.setAttribute('href', waLink);
-
-    // Dispara Contact en paralelo (sin bloquear navegación) + fallback imagen
-    cta.addEventListener('click', function(){
-      try { if (window.fbq) fbq('track','Contact'); } catch(e) {}
-      (new Image()).src = https://www.facebook.com/tr?id=742433698739693&ev=Contact&dl=${encodeURIComponent(location.href)}&v=2.9.97&r=${Date.now()};
-
-      // Fallback: si el navegador bloquea _blank, forzamos misma pestaña
-      setTimeout(() => {
-        if (document.visibilityState === 'visible') {
-          window.location.href = waLink;
-        }
-      }, 350);
-    });
-  </script>
 </body>
-</html
+</html>
